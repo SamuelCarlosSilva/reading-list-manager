@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using reading_list_manager_api.Models;
+using DotNetEnv;
 
 namespace reading_list_manager_api
 {
@@ -10,7 +11,14 @@ namespace reading_list_manager_api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            Env.Load();
+
+            var server = Environment.GetEnvironmentVariable("DB_SERVER");
+            var database = Environment.GetEnvironmentVariable("DB_NAME");
+            var user = Environment.GetEnvironmentVariable("DB_USER");
+            var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
+
+            var connectionString = $"Server={server};Database={database};User={user};Password={password};";
 
             builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
