@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using reading_list_manager_api.Models;
+
 namespace reading_list_manager_api
 {
     public class Program
