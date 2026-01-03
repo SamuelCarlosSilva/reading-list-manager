@@ -11,7 +11,7 @@ namespace reading_list_manager_api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            Env.Load();
+            Env.Load(Path.Combine(Directory.GetCurrentDirectory(), "../.env"));
 
             var server = Environment.GetEnvironmentVariable("DB_SERVER");
             var database = Environment.GetEnvironmentVariable("DB_NAME");
