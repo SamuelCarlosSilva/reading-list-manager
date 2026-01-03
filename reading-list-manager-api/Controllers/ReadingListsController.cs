@@ -87,6 +87,23 @@ namespace reading_list_manager_api.Controllers
             return NoContent();
         }
 
+        // PUT: api/ReadingLists/5/status
+        [HttpPatch("{id}/status")]
+        public async Task<IActionResult> UpdateReadingStatus(
+    int id,
+    ReadingListUpdateDto dto)
+        {
+            var readingList = await _context.ReadingLists.FindAsync(id);
+
+            if (readingList == null)
+                return NotFound();
+
+            readingList.Status = dto.Status;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
 
         // POST: api/ReadingLists
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
