@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using reading_list_manager_api.Models;
+
 
 namespace reading_list_manager_api.Controllers
 {
@@ -22,65 +18,107 @@ namespace reading_list_manager_api.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserReadDto>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+                .Select(u => new UserReadDto
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    Email = u.Email
+                })
+                .ToListAsync();
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<UserReadDto>> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users
+                .Where(u => u.Id == id)
+                .Select(u => new UserReadDto
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    Email = u.Email
+                })
+                .FirstOrDefaultAsync();
 
             if (user == null)
-            {
                 return NotFound();
-            }
 
             return user;
         }
 
-        // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+
+        // GET: api/Users/ReadingList/5
+        [HttpGet("ReadingList/{id}")]
+        public async Task<ActionResult<UserWithReadingListsDto>> GetUserWithReadingLists(int id)
         {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
+            var user = await _context.Users
+                .Where(u => u.Id == id)
+                .Select(u => new UserWithReadingListsDto
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                    Id = u.Id,
+                    Name = u.Name,
+                    Email = u.Email,
+                    ReadingLists = u.ReadingLists.Select(r => new ReadingListUserDto
+                    {
+                        Id = r.Id,
+                        BookId = r.BookId,
+                        BookTitle = r.Book.Title,
+                        Status = r.Status,
+                        AddedAt = r.AddedAt
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync();
 
-            return NoContent();
+            if (user == null)
+                return NotFound();
+
+            return user;
         }
 
+
         // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<UserReadDto>> PostUser(UserCreateDto dto)
         {
+            var user = new User
+            {
+                Name = dto.Name,
+                Email = dto.Email
+            };
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            var result = new UserReadDto
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email
+            };
+
+            return CreatedAtAction(nameof(GetUser),
+                new { id = result.Id }, result);
+        }
+
+        // PUT: api/Users/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutUser(int id, UserUpdateDto dto)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+                return NotFound();
+
+            user.Name = dto.Name;
+            user.Email = dto.Email;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         // DELETE: api/Users/5
@@ -88,20 +126,14 @@ namespace reading_list_manager_api.Controllers
         public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
+
             if (user == null)
-            {
                 return NotFound();
-            }
 
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
         }
     }
 }
