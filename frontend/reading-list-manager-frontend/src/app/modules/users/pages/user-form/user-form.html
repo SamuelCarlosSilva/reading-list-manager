@@ -1,0 +1,32 @@
+<div class="user-form">
+  <h2>{{ isEditMode ? 'Editar Usuário' : 'Novo Usuário' }}</h2>
+
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label>Nome</label>
+      <input type="text" class="form-control" formControlName="name" />
+      <div *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched"
+           class="text-danger">
+        Nome é obrigatório
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" class="form-control" formControlName="email" />
+      <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+           class="text-danger">
+        Email inválido
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary"
+            [disabled]="userForm.invalid">
+      {{ isEditMode ? 'Salvar' : 'Criar' }}
+    </button>
+
+    <button type="button" class="btn btn-secondary" (click)="onCancel()">
+      Cancelar
+    </button>
+  </form>
+</div>

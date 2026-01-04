@@ -1,0 +1,33 @@
+<div class="user-list">
+  <h2>Usuários</h2>
+  
+  <button (click)="onCreate()" class="btn btn-primary">Novo Usuário</button>
+
+  <div *ngIf="loading">Carregando...</div>
+  
+  <table class="table mt-2" *ngIf="!loading && users.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          <button class="btn btn-sm btn-info" (click)="onEdit(user)">Editar</button>
+          <button class="btn btn-sm btn-danger" (click)="onDelete(user.id!)">Excluir</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && users.length === 0" class="alert alert-info">Nenhum usuário encontrado</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+</div>

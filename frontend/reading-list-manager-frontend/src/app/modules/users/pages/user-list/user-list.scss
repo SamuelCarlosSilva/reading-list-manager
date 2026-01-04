@@ -1,0 +1,73 @@
+/* Container geral */
+.user-list {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: var(--mat-sys-surface, #fff);
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+  border-radius: 8px;
+}
+
+/* Título da página */
+.user-list h2 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: var(--mat-sys-on-surface, #333);
+}
+
+/* Botão de novo usuário */
+.user-list button.btn-primary {
+  margin-bottom: 1rem;
+  background-color: var(--mat-sys-primary, #6200ee);
+  color: white;
+}
+
+/* Tabela */
+.user-list table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.user-list table th,
+.user-list table td {
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+.user-list table th {
+  background: var(--mat-sys-primary-container, #f2e7fe);
+  color: var(--mat-sys-on-primary-container, #000);
+  font-weight: bold;
+}
+
+/* Botões de ação */
+.user-list button.btn-info,
+.user-list button.btn-danger {
+  margin-right: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.user-list button.btn-info {
+  background: var(--mat-sys-secondary, #018786);
+  color: white;
+}
+
+.user-list button.btn-danger {
+  background: var(--mat-sys-error, #b00020);
+  color: white;
+}
+
+/* Loading e erro */
+.user-list div[ng-reflect-ng-if] {
+  margin-top: 1rem;
+  font-size: 1rem;
+  text-align: center;
+  color: var(--mat-sys-on-surface, #333);
+}
+
+.user-list .loading {
+  font-style: italic;
+}
