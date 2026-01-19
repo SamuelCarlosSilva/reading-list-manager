@@ -16,6 +16,21 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./modules/users/pages/user-form/user-form').then(c => c.UserForm)
   },
+    {
+    path: 'books',
+    loadComponent: () =>
+      import('./modules/books/pages/book-list/book-list').then(m => m.BookList)
+  },
+  {
+    path: 'books/new',
+    loadComponent: () =>
+      import('./modules/books/pages/book-form/book-form').then(m => m.BookForm)
+  },
+  {
+    path: 'books/:id/edit',
+    loadComponent: () =>
+      import('./modules/books/pages/book-form/book-form').then(m => m.BookForm)
+  },
   {
     path: '',
     redirectTo: 'users',

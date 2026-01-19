@@ -1,0 +1,30 @@
+<div class="book-list">
+  <h2>Livros</h2>
+
+  <button (click)="onCreate()" class="btn btn-primary">Novo Livro</button>
+
+  <table class="table mt-2">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Título</th>
+        <th>Autor</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let book of books">
+        <td>{{ book.id }}</td>
+        <td>{{ book.title }}</td>
+        <td>{{ book.author }}</td>
+        <td>
+          <button class="btn btn-sm btn-info" (click)="onEdit(book)">Editar</button>
+          <button class="btn btn-sm btn-danger" (click)="onDelete(book.id!)">Excluir</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="loading">Carregando...</div>
+  <div *ngIf="error">{{ error }}</div>
+</div>
